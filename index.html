@@ -10,16 +10,103 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link href="css\styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" 
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link href="css\teststyles.css" rel="stylesheet">
     
 </head>
 <body>
     <h1>Coding Quiz Challenge</h1>
 
+    <div class="start">
     <p>
         Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will add 10 seconds to your time! Good luck~
     </p>
 
-    <button type="button" class="btn">Start Quiz!</button>
+    <button id="beginButton" type="button" class="btn">Start Quiz!</button>
+
+    </div>
+
+    <main class="main">
+
+    <!-- quiz window -->
+    <div id="gameCard" class="w3-container-hide">
+        <h2 class="timer">Timer: </h2>
+
+        <div id="card1" class="w3-card-4">
+
+            <header class="w3-container w3-light grey">
+                <h3 id="question">Question goes here</h3>
+            </header>
+
+            <hr style="margin-top:0; border-color:transparent;">
+
+            <div id="multipleChoice" class="d-grid gap-2">
+                <div class="questionLine">
+                    <label id="mcA"></lable>
+                </div><hr>
+
+                <div class="questionLine">
+                    <label id="mcB"></label>
+                </div><hr>
+
+                <div class="questionLine">
+                    <label id="mcC"></label>
+                </div><hr>
+
+                <div class="questionLine">
+                    <label id="mcD"></label>
+                </div>
+            </div>
+
+            <hr style="margin-top:0; border-color:transparent;">
+
+            <footer id="feedback1">You've got this!</footer>
+
+        </div>
+
+    </div>
+
+    <button id="leaderButton" type="button" class="btn">Gander at Them High Scores</button>
+
+    <!-- player input window -->
+    <div id="inputForm" class="w3-container hide">
+
+        <h1>Game Over!</h1>
+
+        <h2>You scored <span id="scoreButton" class="btn">Score</span> points! Not too shabby, amigo~</h2>
+            <form>
+                <label for="initalsBox">Enter your initals here:</label></br>
+                <input id="initalsBox" type="text" maxlength="3"></br>
+                <input id="submitButton" type="submit" class="btn">
+            </form>
+
+    </div>
+
+    <!-- high score window -->
+    <div id="scoreCard" class="w3-contrainer hide">
+
+    <div id="card2">
+        <header class="">
+            <h1>Top 5 High Scores</h1>
+        </header>
+
+        <hr style="margin-top:0; border-color:transparent;">
+        <div id="leaderBoard" style="min-height:275px"></div>
+
+        <hr style="margin-top:0; border-color:transparent;">
+        <footer id="feedback2">Thanks for stopping by~ Hope to see you again soon! c:</footer>
+    </div>
+    
+</main>
+
+    <script src="scripts\questions.js"></script>
+    <script src="scripts\script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
 </body>
+
 </html>
