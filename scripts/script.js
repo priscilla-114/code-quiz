@@ -1,76 +1,139 @@
-var beginQuiz = document.querySelector("#beginButton");
-var leaderButton = document.querySelector("#leaderButton");
-var timerDisplay = document.querySelector(".timer");
-var gameCard = document.querySelector("#gameCard");
-var question = document.querySelector("#question");
-var mcA = document.querySelector("#mcA");
-var mcB = document.querySelector("#mcB");
-var mcC = document.querySelector("#mcC");
-var mcD = document.querySelector("#mcD");
-var answer = document.querySelector("#answer");
-var feedback = document.querySelector("#feedback1");
-var card = document.querySelector("multipleChoice");
-var inputForm = document.querySelector("#inputForm");
-var scoreCard = document.querySelector("#scoreCard");
-var scoreButton = document.querySelector("#scoreButton")
-var initialsBox = document.querySelector("#initialsBox");
-var submitButton = document.querySelector("#submitButton")
-var backButton = document.querySelector("#backButton");
-var clearButtton = document.querySelector("#clearButton");
-var start = document.querySelector(".start");
-
-var timeLeft = questionBank.length * 6;
-var q = 0;
-var s = 0;
 var score = 0;
-var scorelist = [];
-var timeInterval;
+var questionIndex = 0;
 
-getScore();
+/* DOM elements */
+var questionsDiv = document.querySelector("#questionsDiv");
+var wrapper = document.querySelector("#wrapper");
+var highscoreLink = document.querySelector(".highscore-link")
+var playAgainLink = document.querySelector("#goBack")
+var clearLink = document.querySelector("#clear");
+var questionContainer = document.querySelector(".question-container");
+var highscoreContainer = document.querySelector(".highscore-container");
+
+/* timer variables */
+var timer = document.querySelector("#start");
+var currentTime = document.querySelector("#currentTime");
+var secondsLeft = 61;
+var holdInterval = 0;
+var penalty = 5;
+var ulCreate = document.createElement("ul");
 
 /* timer for quiz */
-function timer() {
-    timeInterval = setInterval(function () {
-        timeLeft--;
-        timerDisplay.textContent = "Timer: " + timeLeft;
-
-        if (timeLeft === 0 || q >= questionBank.length) {
-            clearInterval(timeInterval);
-            gameOver();
-        }
-    }, 1000);
-}
-
-/* selecting questions and answers from questionBank */
-function displayQA() {
-    if (q < questionBank.length) {
-        question.textContent = questionBank[q].question;
-        mcA.textContent = questionBank[q].selection[0];
-        mcB.textContent = questionBank[q].selection[1];
-        mcC.textContent = questionBank[q].selection[2];
-        mcD.textContent = questionBank[q].selection[3];
-    } else {
-        gameOver();
+timer.addEventListener("click", function () {
+    if (holdInterval === 0) {
+        holdInterval = setInterval(function () {
+            secondsLeft--;
+            currentTime.textContent = "00:" + secondsLeft;
+            if (secondsLeft < 10) {
+                currentTime.textContent = "00:0" + secondsLeft;
+            }
+            if (secondsLeft <= 0) {
+                clearInterval(holdInterval);
+                gameOver();
+                currentTime.textContent = "Time's up!";
+            }
+        }, 1000);
     }
+    render(questionIndex);
+    return
+});
+
+/* questions and their selections */
+var questions = [
+    {
+        title: "What is one plus one?",
+        choices: ["two", "seven", "four", "thirty"],
+        answer: "two"
+    },
+
+    {
+        title: "Commonly used data types DO not include:",
+        choices: ["strings", "booleans", "alerts", "numbers"],
+        answer: "alerts"
+    },
+    
+    {
+        title: "The condition in an if / else statement is enclosed with _________.",
+        choices: ["quotes", "curly brackets", "parenthesis", "square brackets"],
+        answer: "parenthesis"
+    },
+    
+    {
+        title: "Arrays in Javascript can be used to store _________.",
+        choices: ["numbers and strings", "other arrays", "booleans", "all of the above"],
+        answer: "all of the above"
+    },
+    
+    {
+        title: "String values must be enclosed within _________ when being assigned to variables.",
+        choices: ["commas", "curly brackets", "quotes", "parenthesis"],
+        answer: "quotes"
+    },
+    
+    {
+        title: "A very useful tool used during development and debugging for printing content to the debugger is:",
+        choices: ["JavaScript", "terminal/bash", "for loops", "console.log"],
+        answer: "console.log"
+    },
+    
+];
+
+/* puts questions and selections on page */
+function render(questionIndex) {
+    questionsDiv.innerHTML = "";
+    ulCreate.innerHTML = "";
+    
+/* makes sure questions are looped through */
+for (var i = 0; i < questions.length; i++) {
+    var userQuestion = questions[questionIndex].title;
+    var userChoices = questions[questionIndex].choices;
+    questionsDiv.textContent = userQuestion;
 }
+
+var rule = document.createElement("hr");
+questionsDiv.appendChild(rule);
+userChoices.forEach(function (newItem) {
+    var listItem = document.createElement("li");
+    var listBtn = document.createElement("btn")
+    questionsDiv.appendChild(ulCreate);
+    listBtn.textContent = newItem;
+    ulCreate.appendChild(listItem);
+    listItem.appendChild(listBtn);
+    listBtn.setAttribute("class", "btn");
+    listBtn.addEventListener("click", (compare));
+});
+var rule = document.createElement("hr");
+questionsDiv.appendChild(rule);
+};
 
 /* informing player if chosen answer is correct or incorrect */
-function compareAnswer(event) {
-    if (q >= questionBank.length) {
-        gameOver();
-        clearInterval(timeInterval);
-    } else {
-        if (event === questionBank[q].answer) {
-            feedback1.textContent = "Correct! c:";
+function compare(event) {
+    var element = event.target;
+
+    if (element.matches("btn")) {
+        var createDiv = document.createElement("div");
+        createDiv.setAttribute("id", "createDiv");
+        // correct condition 
+        if (element.textContent == questions[questionIndex].answer) {
+            score++;
+            createDiv.textContent = "Correct! The answer is  " + questions[questionIndex].answer;
+        // incorrect condition 
         } else {
-            timeLeft -= 10;
-            feedback1.textContent = "Incorrect! :c";
-        }
-        score = timeLeft;
-        q++;
-        displayQA();
-        }
-    }
+            secondsLeft = secondsLeft - penalty;
+            createDiv.textContent = "Incorrect! The correct answer is  " + questions[questionIndex].answer;
+        };
+    };
+
+/* determines number question user is on */
+    questionIndex++;
+    if (questionIndex >= questions.length) {
+        gameOver();
+        createDiv.textContent = "End of quiz!" + " " + "You got  " + score + "/" + questions.length + " Correct!";
+    } else {
+        render(questionIndex);
+    };
+    questionsDiv.appendChild(createDiv);
+};
 
 /* retrieving scores from local storage */
 function getScore() {
@@ -147,4 +210,16 @@ leaderButton.addEventListener("click", function (event) {
     leaderButton.classList.add("hide");
     start.classList.add("hide");
     leaderBoard();
+});
+
+/* attempt at a joke button that i spent too much time on */
+const btn = document.getElementById("btn");
+
+promptButton.addEventListener("click", ()=>{
+
+    if(btn.innerText === "Do I Hafta?"){
+        btn.innerText = "Yup, You Gotta :c";
+    }else{
+        btn.innerText= "Do I Hafta?";
+    }
 });
